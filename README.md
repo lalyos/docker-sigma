@@ -23,6 +23,13 @@ docker run -dP \
   web:lalyos
 ```
 
+```
+imgtest() { 
+    docker build -t web:lalyos https://github.com/lalyos/docker-sigma.git#master;
+    docker run -dP -e TITLE="Afternoon coffebreak for $USER" web:lalyos
+}
+```
+
 ## Hint
 
 ```
