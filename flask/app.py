@@ -13,5 +13,6 @@ def hello(name=None):
     return render_template('index.html',
                             title=os.getenv("TITLE", default="Welcome"), 
                             color=os.getenv("COLOR", default="gray"),
-                            body=os.getenv("BODY", default="use TITLE/BODY/COLOR env vars ..."),
+                            giphy=os.getenv("GIPHY", default="QTAVEex4ANH1pcdg16"),
+                            body=os.getenv("BODY", default="use TITLE/BODY/COLOR/GIPHY env vars ..."),
             )
