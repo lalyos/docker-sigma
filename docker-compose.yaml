@@ -1,0 +1,71 @@
+version: '3.9'
+services:
+
+  # nginx-proxy:
+  #   image: nginxproxy/nginx-proxy
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+  traefik:
+    image: traefik:1.7-alpine
+    container_name: traefik
+    restart: always
+    command:
+      - --retry
+      - --rest
+      - --docker.domain=${DOMAIN:-lvh.me}
+      - --docker.network=traefik
+      - --api.dashboard
+    labels:
+      - "traefik.frontend.rule=Host:traefik.${DOMAIN:-lvh.me}"
+      - "traefik.port=8080"
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+  coffee:
+    image: lalyos/web:v8
+    ports:
+      - 80
+    environment:
+      - VIRTUAL_HOST=coffee.lvh.me
+      - TITLE=Coffe bvreak for real
+      - COLOR=hotpink
+
+
+
+  lunch:
+    image: lalyos/web:v8
+    environment:
+      - TITLE=Lunchtime ended ....
+      - COLOR=mediumpurple
+
+  dinner:
+    image: lalyos/web:v8
+    ports:
+      - 80
+    environment:
+      - VIRTUAL_HOST=dinner.lvh.me
+      - TITLE=${TITLE:-Mehetek haza [DEV]}
+      - COLOR=${COLOR:-gray}
+  mydb:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - vipdb:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    ports:
+      - 8080
+  
+networks:
+  default: 
+    name: traefik
+
+volumes:
+  vipdb: 
