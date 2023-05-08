@@ -14,6 +14,16 @@ ec2-nuke() {
     done
 }
 
+alias r='. ec2-functions.sh '
+
+ec2-envs() {
+cat <<EOF
+DB_URL=$DB_URL
+TITLE=$TITLE
+COLOR=$COLOR
+EOF
+}
+
 ec2-run() {
     declare name=$1
 
@@ -21,7 +31,7 @@ ec2-run() {
 
     curl https://raw.githubusercontent.com/lalyos/docker-sigma/master/user-data.sh.tmpl \
       | envsubst > user-data.sh
-      
+
     aws ec2 run-instances \
       --image-id ami-0a0a0efaa60d3479f \
       --key-name boss \
