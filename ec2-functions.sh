@@ -19,6 +19,9 @@ ec2-run() {
 
     : ${name:? required}
 
+    curl https://raw.githubusercontent.com/lalyos/docker-sigma/master/user-data.sh.tmpl \
+      | envsubst > user-data.sh
+      
     aws ec2 run-instances \
       --image-id ami-0a0a0efaa60d3479f \
       --key-name boss \
