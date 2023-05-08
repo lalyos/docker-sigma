@@ -43,5 +43,5 @@ ec2-run() {
 ec2-ips() {
     aws ec2 describe-instances \
       --filters Name=instance-state-name,Values=running \
-    | jq .Reservations[].Instances[].PublicIpAddress -r
+    | jq '.Reservations[].Instances[]|[(.Tags[] | select(.Key == "Name").Value ),.PublicIpAddress]' -cr
 }
