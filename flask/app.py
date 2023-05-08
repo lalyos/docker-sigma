@@ -41,6 +41,10 @@ def vip():
     return json_array
 
 
+@app.route('/mithril')
+def hello(name=None):
+    return render_template('vip.html')
+
 @app.route('/')
 def hello(name=None):
     return render_template('index.html',

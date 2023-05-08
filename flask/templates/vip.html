@@ -1,0 +1,47 @@
+<body>
+  
+    <h2>
+      hello
+    </h2>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+    <div id="content">
+      
+    </div>
+    <script>
+      root=document.getElementById("content")
+      var Model = {
+        vip: [{"name":"bela"}],
+        refresh: function() {
+          console.log("Model.REFRESH() ...");
+          m.request({
+            method: "GET",
+            url: "http://lalyos.szigma.academy/vip",
+          })
+          .then(function(data) {
+              console.log(data)
+              Model.vip = data
+          }).catch(err => console.log(err))
+        }
+       }
+      
+      
+      var Component = {
+        oninit: function() {
+          console.log("init called")   
+          Model.refresh();
+        },
+        view: function() {
+          return m("div",
+            m("h2", "vip list"),
+            m("ul",
+              Model.vip.map(function(i){
+                return m("li",i.name)  
+              })
+            )
+          )
+        }
+      }
+      
+      m.mount(root,Component)
+    </script>
+  </body>
