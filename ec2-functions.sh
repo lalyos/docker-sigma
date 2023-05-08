@@ -17,10 +17,12 @@ ec2-nuke() {
 alias r='. ec2-functions.sh '
 
 ec2-envs() {
+. ec2.env
 cat <<EOF
 DB_URL=$DB_URL
 TITLE=$TITLE
 COLOR=$COLOR
+EIP=$EIP
 EOF
 }
 
@@ -37,8 +39,18 @@ ec2-run() {
       --key-name boss \
       --instance-type t2.micro \
       --user-data file://user-data.sh \
-      --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${name}}]"
+      --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${name}}]" \
+       > ec2-run.log
 }
+
+ec2-assign() {
+    ins=$(cat ec2-run.log| jq -r .Instances[0].InstanceId)
+
+   aws ec2 associate-address \
+     --instance-id ${ins} \
+     --public-ip ${EIP}
+}
+
 
 ec2-ips() {
     aws ec2 describe-instances \
