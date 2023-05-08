@@ -42,7 +42,7 @@ def vip():
 
 
 @app.route('/mithril')
-def hello(name=None):
+def mithril(name=None):
     return render_template('vip.html')
 
 @app.route('/')
