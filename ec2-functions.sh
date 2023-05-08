@@ -18,7 +18,7 @@ alias r='. ec2-functions.sh '
 
 ec2-envs() {
 . ec2.env
-cat <<EOF
+cat -vet <<EOF
 DB_URL=$DB_URL
 TITLE=$TITLE
 COLOR=$COLOR
