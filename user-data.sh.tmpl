@@ -1,0 +1,12 @@
+#!/bin/bash
+
+apt-get update -qq
+apt-get install -y python3-pip curl
+pip install flask
+pip install psycopg2-binary
+git clone https://github.com/lalyos/docker-sigma.git
+cd docker-sigma/flask/
+
+export DB_URL="${DB_URL}"
+
+flask run -p 80 --host=0.0.0.0 &>/var/log/flask.log &
