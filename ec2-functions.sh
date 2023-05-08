@@ -41,6 +41,21 @@ ec2-run() {
       --user-data file://user-data.sh \
       --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${name}}]" \
        > ec2-run.log
+    
+    echo wait for instance to start ...
+    aws ec2 wait \
+      instance-running \
+      --instance-ids $(cat ec2-run.log | jq .Instances[0].InstanceId -r)
+    
+    ec2-assign
+}
+
+
+ec2-log() {
+    echo === loggin user-data
+    ssh ec2 tail -f /var/log/cloud-init-output.log
+    echo === loggin flask
+    ssh ec2 tail -f /var/log/flask.log
 }
 
 ec2-assign() {
