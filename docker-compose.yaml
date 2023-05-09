@@ -25,7 +25,17 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-
+  flask:
+    image: flask
+    build: ./flask
+    ports:
+      - 5000
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_TABLE=${DB_TABLE}
+      - TITLE=${TITLE}
+      - COLOR=${COLOR}
+      - BODY=${BODY}    
   coffee:
     image: lalyos/web:v8
     ports:
@@ -45,6 +55,8 @@ services:
 
   dinner:
     image: lalyos/web:v8
+    # read_only: true
+    # init: true
     ports:
       - 80
     environment:
