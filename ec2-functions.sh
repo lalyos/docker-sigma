@@ -21,10 +21,60 @@ ec2-envs() {
 cat -vet <<EOF
 AWS_DEFAULT_PROFILE=$AWS_DEFAULT_PROFILE
 DB_URL=$DB_URL
+DB_TABLE=$DB_TABLE
 TITLE=$TITLE
 COLOR=$COLOR
 EIP=$EIP
 EOF
+}
+
+create-user-table() {
+    declare user=$1
+    : ${user:? reuired}
+
+    sed "s/vip/vip${user}/g" ../sql/init.sql | tee tmp.sql
+    psql $DB_URL -f tmp.sql 
+}
+
+insert-user-table() {
+    declare user=$1
+    : ${user:? reuired}
+
+    cat > tmp.sql  <<EOF
+insert into vip${user} values ('${user}', 33, 99);
+EOF
+  psql $DB_URL -f tmp.sql 
+}
+
+team() {                                                                                                
+cat <<EOF                                                                                               
+lalyos                                                                                                  
+geri                                                                                                    
+barna                                                                                                   
+robin                                                                                                   
+attila                                                                                                  
+bencej                                                                                                  
+laci                                                                                                    
+gabor                                                                                                   
+norbi                                                                                                   
+andras                                                                                                  
+kristof                                                                                                 
+EOF
+}
+
+
+create-all-table() {
+  for u in $(team); do 
+    echo === next user: $u
+    create-user-table $u
+  done
+}
+
+insert-all-table() {
+  for u in $(team); do 
+    echo === next user: $u
+    insert-user-table $u
+  done
 }
 
 ec2-run() {
