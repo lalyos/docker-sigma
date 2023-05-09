@@ -30,12 +30,23 @@
           console.log("init called")   
           Model.refresh();
         },
+        delete: function(e) {
+            console.log("deleted: ", e.target.id)
+        },
         view: function() {
           return m("div",
             m("h2", "vip list"),
+            m("div",
+              m("input"),
+              m("input"),
+              m("button", "add"),
+            ),
             m("ul",
               Model.vip.map(function(i){
-                return m("li",i.Name)  
+                return m("li",
+                  m("span", i.Name),
+                  m("button",{id:i.Name, onclick: Component.delete}, "delete")
+                )  
               })
             )
           )
