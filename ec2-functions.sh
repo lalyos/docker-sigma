@@ -19,6 +19,7 @@ alias r='. ec2-functions.sh '
 ec2-envs() {
 . ec2.env
 cat -vet <<EOF
+AWS_DEFAULT_PROFILE=$AWS_DEFAULT_PROFILE
 DB_URL=$DB_URL
 TITLE=$TITLE
 COLOR=$COLOR
