@@ -16,12 +16,14 @@ def hello_world():
 def vip():
 
     conn = psycopg2.connect(os.getenv("DB_URL"))
+    table = os.getenv("DB_TABLE",default= "vip")
+    app.logger.info("table used: %s", table)
 
     # Create a cursor object
     cursor = conn.cursor()
 
     # Execute a SELECT statement to get all lines from the 'vip' table
-    cursor.execute("SELECT * FROM vip")
+    cursor.execute(f"SELECT * FROM {table}")
 
     # Fetch all the results
     results = cursor.fetchall()
