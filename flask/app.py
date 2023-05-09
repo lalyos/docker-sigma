@@ -47,7 +47,8 @@ def vip():
 
 @app.route('/mithril')
 def mithril(name=None):
-    return render_template('vip.html')
+    table = os.getenv("DB_TABLE",default= "vip")
+    return render_template('vip.html', user=table[3:])
 
 @app.route('/')
 def hello(name=None):
