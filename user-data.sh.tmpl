@@ -11,5 +11,6 @@ cd docker-sigma/flask/
 export TITLE="${TITLE}"
 export COLOR="${COLOR}"
 export DB_URL="${DB_URL}"
+export DB_TABLE="${DB_TABLE}"
 
 flask run -p 80 --host=0.0.0.0 &>/var/log/flask.log &
