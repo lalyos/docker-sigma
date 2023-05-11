@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vip List</title>
+</head>
+
+<body>
+  
+    <h2>Flask v4</h2>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+    <div id="content">
+      
+    </div>
+    <script>
+      root=document.getElementById("content")
+
+      function NewItem(initialVnode) {
+        console.log("New Item KONSTRUKTOR!!!!", initialVnode.attrs.url)
+        var url = initialVnode.attrs.url
+        var refreshFN = initialVnode.attrs.refreshFN
+        var name="def"
+        var age=99
+
+        function AddItem(e) {
+          console.log("new item clicked", name, age)
+          m.request({
+            method: "POST",
+            url: url,
+            params: {name: name, age:age},
+          })
+          .then(function(data) {
+              console.log("Add response:", data)
+              refreshFN()
+          }).catch(err => console.log(err))
+        }
+
+        function ChangedName(e) {
+          console.log("NAME CHANGED", e)
+          name = e.target.value
+          return true
+        }
+        function ChangedAge(e) {
+          age = e.target.value
+        }
+        return {
+          view: function() {
+            return m( "div",
+              m("input",{value:name, onchange: ChangedName}),
+              m("input",{value:age, onchange: ChangedAge}),
+              m("button",{onclick: AddItem},"Add"),
+            )
+          }
+        }
+      }
+
+      function ListComponent() {
+        var vip= [{"name":"bela"}]
+        var url=localStorage.getItem("defurl")
+        
+
+        function urlchanged(e) {
+            console.log("changed ...", e.target.value)
+            url = e.target.value
+            localStorage.setItem("defurl",e.target.value)
+            refresh()
+        }
+        function refresh() {
+            console.log("Model.REFRESH() ...");
+            m.request({
+              method: "GET",
+              url: url,
+
+            })
+            .then(function(data) {
+                console.log(data)
+                vip = data
+            }).catch(err => console.log(err))
+        }
+
+        function deleteItem(e) {
+            console.log("delete.", e.target.id);
+            m.request({
+              method: "DELETE",
+              url: url,
+              params: {name: e.target.id},
+            })
+            .then(function(data) {
+                console.log(data)
+                refresh()
+            }).catch(err => console.log(err))
+        }
+
+        return {
+          view: function() {
+            return m("div",
+              m("h2", "vip list"),
+              m(NewItem, {url: url, refreshFN: refresh}),
+              m("input",{size:50, onchange: urlchanged, value:url}),
+              m("ul",
+                vip.map(function(i){
+                  return m("li",
+                  m("button",{id:i.Name,onclick:deleteItem},"X"),
+                    m("span",i.Name),
+                  )
+
+                })
+              )
+            )
+          },
+          oninit: function() {
+            console.log("init called")   
+            refresh();
+          },
+        }
+      }
+      
+
+
+      
+      m.mount(root,ListComponent())
+    </script>
+  </body>
+</html>
