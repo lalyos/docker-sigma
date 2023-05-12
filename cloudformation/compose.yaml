@@ -1,0 +1,14 @@
+name: sam
+services:
+  dev:
+    image: public.ecr.aws/sam/build-python3.9:1.83.0-20230511200137
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/.aws:/root/.aws
+      - ./.bashrc:/root/.bashrc
+    environment:
+      - AWS_DEFAULT_PROFILE=bossman
+      - PAGER=cat
+    working_dir: /app
+    command: sleep 9999
